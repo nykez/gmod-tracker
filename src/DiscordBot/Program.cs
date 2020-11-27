@@ -7,6 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Services;
+using Microsoft.Extensions.Logging;
 
 namespace DiscordBot
 {
@@ -21,17 +22,24 @@ namespace DiscordBot
         public async Task MainAsync()
         {
             _client = new DiscordSocketClient();
+            // build our config (bot socket/prefix as of 11/27/2020)
             _config = BuildConfig();
 
             var services = ConfigureServices();
             services.GetRequiredService<LogService>();
 
+            // auth to discord
             await _client.LoginAsync(TokenType.Bot, _config["token"]);
+
+            // start bot
             await _client.StartAsync();
 
+            // set status
+            await _client.SetGameAsync("Watching for commits...");
 
             // Here we initialize the logic required to register our commands.
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+
 
             await Task.Delay(-1);
         }
