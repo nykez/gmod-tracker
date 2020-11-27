@@ -37,8 +37,9 @@ namespace DiscordBot.Modules
                 foreach (var cmd in module.Commands)
                 {
                     var result = await cmd.CheckPreconditionsAsync(Context);
+
                     if (result.IsSuccess)
-                        description += $"~{cmd.Aliases.First()}\n";
+                        description += $"~{string.Join(", ", cmd.Aliases.ToArray())}\n";
                 }
 
                 if (!string.IsNullOrWhiteSpace(description))
