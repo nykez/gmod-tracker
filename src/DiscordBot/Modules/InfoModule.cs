@@ -100,11 +100,12 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            var guildChannel =  await _context.Channels.FirstOrDefaultAsync(c => c.ChannelId == channel.Id);
+            var guildChannel =  await _context.Channels.FirstOrDefaultAsync(c => c.ChannelId == channel.Id || c.GuildId == Context.Guild.Id);
 
             if (guildChannel != null)
             {
-                await ReplyAsync("Guild channel is already set to this channel!");
+                await ReplyAsync(
+                    $"{MentionUtils.MentionUser(Context.User.Id)} Guild already has a channel set for commits.");
                 return;
             }
                 
