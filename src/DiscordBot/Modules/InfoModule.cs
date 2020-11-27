@@ -105,7 +105,7 @@ namespace DiscordBot.Modules
             if (guildChannel != null)
             {
                 await ReplyAsync(
-                    $"{MentionUtils.MentionUser(Context.User.Id)} Guild already has a channel set for commits.");
+                    $"{MentionUtils.MentionUser(Context.User.Id)} Guild already has a channel set for commits. (Use RemoveChannel command)");
                 return;
             }
                 
