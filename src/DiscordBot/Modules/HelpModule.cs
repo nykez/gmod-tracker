@@ -39,7 +39,19 @@ namespace DiscordBot.Modules
                     var result = await cmd.CheckPreconditionsAsync(Context);
 
                     if (result.IsSuccess)
-                        description += $"~{string.Join(", ", cmd.Aliases.ToArray())}\n";
+                    {
+                        // add any parameters if it has some
+                        if (cmd.Parameters.Any())
+                        {
+                            description += $"~{string.Join(", ", cmd.Aliases.ToArray())}";
+                            description += $" (params: {string.Join(", ", cmd.Parameters)})\n";
+                        }
+                        else
+                        // no params -> just print alias and move on
+                            description += $"~{string.Join(", ", cmd.Aliases.ToArray())}\n";
+                        
+                    }
+                    
                 }
 
                 if (!string.IsNullOrWhiteSpace(description))
