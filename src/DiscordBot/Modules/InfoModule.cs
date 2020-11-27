@@ -79,5 +79,23 @@ namespace DiscordBot.Modules
             await ReplyAsync(embed: embed.Build());
         }
 
+        [Command("setchannel")]
+        [Summary("Sets the channel to broadcast commits to.")]
+        public async Task SetChannel(IChannel channel = null)
+        {
+            // if channel somehow bypasses the channel exeception
+            if (channel == null)
+            {
+                await ReplyAsync(
+                    $"{MentionUtils.MentionUser(Context.User.Id)} Could not find a valid channel. Try using channel mention instead.");
+                return;
+            }
+            
+            // we have a found channel: process it and save it into database to broadcast too
+            // if we broadcast to the channel, and it's not valid then remove it from the database
+            // and alert an admin?
+
+            await ReplyAsync($"{MentionUtils.MentionUser(Context.User.Id)} set Garry's Mod commit channel to {MentionUtils.MentionChannel(channel.Id)}!");
+        }
     }
 }
