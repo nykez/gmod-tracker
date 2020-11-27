@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordBot.Context;
+using DiscordBot.Models;
 using DiscordBot.Services;
 
 namespace DiscordBot.Modules
@@ -12,7 +15,13 @@ namespace DiscordBot.Modules
     [Name("General Commands")]
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
+        private readonly BotContext _context;
         // Dependency Injection will fill this value in for us
+
+        public PublicModule(BotContext context)
+        {
+            _context = context;
+        }
 
         [Command("ping")]
         [Summary("hello world?")]
@@ -90,6 +99,18 @@ namespace DiscordBot.Modules
                     $"{MentionUtils.MentionUser(Context.User.Id)} Could not find a valid channel. Try using channel mention instead.");
                 return;
             }
+
+            var guildChannel =  await _context.Channels.FirstOrDefaultAsync(c => c.ChannelId == channel.Id);
+
+            if (guildChannel != null)
+            {
+                await ReplyAsync("Guild channel is already set to this channel!");
+                return;
+            }
+                
+
+            await _context.Channels.AddAsync(new RegisteredChannel {ChannelId = channel.Id, GuildId = Context.Guild.Id});
+            await _context.SaveChangesAsync();
             
             // we have a found channel: process it and save it into database to broadcast too
             // if we broadcast to the channel, and it's not valid then remove it from the database

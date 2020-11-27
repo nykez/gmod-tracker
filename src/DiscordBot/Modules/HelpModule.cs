@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using DiscordBot.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 
@@ -15,6 +17,7 @@ namespace DiscordBot.Modules
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
         private readonly CommandService _service;
+
 
         public HelpModule(CommandService service)
         {

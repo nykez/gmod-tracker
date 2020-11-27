@@ -7,7 +7,10 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Services;
+using DiscordBot.Context;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 namespace DiscordBot
 {
@@ -48,6 +51,7 @@ namespace DiscordBot
 
         private async Task _client_Ready()
         {
+            
             await Task.Run(() => Console.WriteLine($"Total Guilds: {_client.Guilds.Count}"));
         }
 
@@ -58,11 +62,13 @@ namespace DiscordBot
                 .AddSingleton(_client)
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
+                .AddDbContext<BotContext>()
                 // Logging
                 .AddLogging()
                 .AddSingleton<LogService>()
                 // Extra
                 .AddSingleton(_config)
+
                 // Add additional services here...
                 .BuildServiceProvider();
         }
