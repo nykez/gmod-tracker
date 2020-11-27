@@ -37,11 +37,18 @@ namespace DiscordBot
             // set status
             await _client.SetGameAsync("Watching for commits...");
 
+            _client.Ready += _client_Ready;
+
             // Here we initialize the logic required to register our commands.
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
 
             await Task.Delay(-1);
+        }
+
+        private async Task _client_Ready()
+        {
+            await Task.Run(() => Console.WriteLine($"Total Guilds: {_client.Guilds.Count}"));
         }
 
         private IServiceProvider ConfigureServices()
@@ -67,5 +74,6 @@ namespace DiscordBot
                 .AddJsonFile("config.json")
                 .Build();
         }
+
     }
 }
