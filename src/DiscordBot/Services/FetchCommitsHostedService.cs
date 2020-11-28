@@ -4,29 +4,34 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 
+#pragma warning disable 4014
+
 namespace DiscordBot.Services
 {
     public class FetchCommitsHostedService: IHostedService
     {
-        private readonly ILogger<FetchCommitsHostedService> _logger;
+        private readonly ILogger _logger;
         private readonly IBroadcastService _broadcastService;
 
-        public FetchCommitsHostedService(ILogger<FetchCommitsHostedService> logger, IBroadcastService broadcastService)
+        public FetchCommitsHostedService(ILoggerFactory logger, IBroadcastService broadcastService)
         {
-            _logger = logger;
+            _logger = logger.CreateLogger("FetchCommitsHostedService");
             _broadcastService = broadcastService;
         }
 
-        Task IHostedService.StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting {jobName}", nameof(FetchCommitsHostedService));
             Console.WriteLine($"Starting {nameof(FetchCommitsHostedService)}");
+
+            RefreshCommitsLog(cancellationToken);
 
             return Task.CompletedTask;
         }
 
         private async Task RefreshCommitsLog(CancellationToken stoppingToken)
         {
+            Console.WriteLine("doing this!");
             while (!stoppingToken.IsCancellationRequested)
             {
 
@@ -40,11 +45,11 @@ namespace DiscordBot.Services
                 }
 
                 // delay 5 minutes
-                await Task.Delay(300000);
+                await Task.Delay(5000);
             }
         }
 
-        Task IHostedService.StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Stopping {jobName}", nameof(FetchCommitsHostedService));
 
