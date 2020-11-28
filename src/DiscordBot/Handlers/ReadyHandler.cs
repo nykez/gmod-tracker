@@ -7,10 +7,7 @@ namespace DiscordBot.Handlers
 {
     public static class ReadyHandler
     {
-        internal static async Task Ready()
-        {
-            
-        }
+
     }
 
 }

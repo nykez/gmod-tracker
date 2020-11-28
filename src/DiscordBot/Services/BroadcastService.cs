@@ -33,7 +33,6 @@ namespace DiscordBot.Services
         private readonly HttpClient _httpClient;
         private readonly BotContext _context;
 
-        private EmbedBuilder _embed;
 
         public int LastCommitId { get; set; } =  7650;
 

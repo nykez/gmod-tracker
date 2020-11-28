@@ -67,10 +67,10 @@ namespace DiscordBot
                 // Logging
                 .AddLogging()
                 .AddSingleton<LogService>()
-                .AddHostedService<FetchCommitsHostedService>()
                 .AddSingleton<IBroadcastService, BroadcastService>()
                 // Extra
                 .AddSingleton(_config)
+                .AddHostedService<FetchCommitsHostedService>()
 
                 // Add additional services here...
                 .BuildServiceProvider();
