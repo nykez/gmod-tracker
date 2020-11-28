@@ -16,11 +16,14 @@ namespace DiscordBot.Modules
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
         private readonly BotContext _context;
+        private readonly IBroadcastService _broadcastService;
+
         // Dependency Injection will fill this value in for us
 
-        public PublicModule(BotContext context)
+        public PublicModule(BotContext context, IBroadcastService broadcastService)
         {
             _context = context;
+            _broadcastService = broadcastService;
         }
 
         [Command("ping")]
@@ -87,6 +90,30 @@ namespace DiscordBot.Modules
 
             await ReplyAsync(embed: embed.Build());
         }
+        
+
+        [Command("deletechannel")]
+        [Summary("Deletes a channel. Stopping commits to that channel.")]
+        public async Task DeleteChannel(IChannel channel = null)
+        {
+            // if channel somehow bypasses the channel exeception
+            if (channel == null)
+            {
+                await ReplyAsync(
+                    $"{MentionUtils.MentionUser(Context.User.Id)} Could not find a valid channel. Try using channel mention instead.");
+                return;
+            }
+
+            var guildChannel = await _context.Channels.FirstOrDefaultAsync(c => c.ChannelId == channel.Id);
+
+            if (guildChannel != null)
+            {
+                _context.Remove(guildChannel);
+                await _context.SaveChangesAsync();
+
+                await ReplyAsync($"{MentionUtils.MentionUser(Context.User.Id)} Channel has been removed from broadcast list.");
+            }
+        }
 
         [Command("setchannel")]
         [Summary("Sets the channel to broadcast commits to.")]
@@ -119,6 +146,14 @@ namespace DiscordBot.Modules
             // and alert an admin?
 
             await ReplyAsync($"{MentionUtils.MentionUser(Context.User.Id)} set Garry's Mod commit channel to {MentionUtils.MentionChannel(channel.Id)}!");
+        }
+
+        [Command("getcommits")]
+        [Summary("returns some commits")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task GetCommits()
+        {
+            await _broadcastService.CheckCommits();
         }
     }
 }
