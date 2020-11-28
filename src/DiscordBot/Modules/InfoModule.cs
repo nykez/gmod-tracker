@@ -90,6 +90,7 @@ namespace DiscordBot.Modules
 
         [Command("setchannel")]
         [Summary("Sets the channel to broadcast commits to.")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetChannel(IChannel channel = null)
         {
             // if channel somehow bypasses the channel exeception
