@@ -19,12 +19,36 @@ namespace DiscordBot.Services
 
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Starting {jobName}", nameof(FetchCommitsHostedService));
+
+            return Task.CompletedTask;
+        }
+
+        private async Task RefreshCommitsLog(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+
+                try
+                {
+                    await _broadcastService.CheckCommits();
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Job {jobName} threw an exception", nameof(FetchCommitsHostedService));
+                }
+
+                // delay 5 minutes
+                await Task.Delay(300000);
+            }
         }
 
         Task IHostedService.StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Stopping {jobName}", nameof(FetchCommitsHostedService));
+
+            return Task.CompletedTask;
+
         }
     }
 }
