@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,9 +8,8 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Services;
 using DiscordBot.Context;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Sqlite;
+
+
 
 namespace DiscordBot
 {
@@ -25,6 +24,7 @@ namespace DiscordBot
         public async Task MainAsync()
         {
             _client = new DiscordSocketClient();
+
             // build our config (bot socket/prefix as of 11/27/2020)
             _config = BuildConfig();
 
@@ -63,6 +63,7 @@ namespace DiscordBot
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddDbContext<BotContext>()
+                .AddScoped(sp => new HttpClient {BaseAddress =  new Uri("https://commits.facepunch.com") })
                 // Logging
                 .AddLogging()
                 .AddSingleton<LogService>()
