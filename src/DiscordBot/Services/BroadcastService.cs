@@ -33,7 +33,9 @@ namespace DiscordBot.Services
         private readonly HttpClient _httpClient;
         private readonly BotContext _context;
 
-        public int LastCommitId { get; set; } = 0;
+        private EmbedBuilder _embed;
+
+        public int LastCommitId { get; set; } =  7650;
 
         /// <summary>
         /// Creeates BroadCastServer
@@ -62,6 +64,28 @@ namespace DiscordBot.Services
             // get all channels in database
             var channels = _context.Channels.ToListAsync().Result;
             bool hasChanges = true;
+
+            List<Embed> builtEmbeds = new List<Embed>();
+
+
+            foreach( var item in commits )
+            {
+                var embed = new EmbedBuilder()
+                {
+                    Author = new EmbedAuthorBuilder()
+                    {
+                        Name = item.User.Name,
+                        IconUrl = item.User.Avatar,
+                    },
+                    Color = Color.Blue,
+                    ThumbnailUrl = _client.CurrentUser.GetAvatarUrl(),
+
+                }.WithFooter(footer => footer.Text = $"{item.Repo} • {item.Branch}").WithTimestamp(item.Created);
+
+                embed.AddField(item.User.Name, $"[{item.Message}]({$"https://commits.facepunch.com/{item.Id}"})").WithUrl("https://www.twitch.tv/asmongold");
+
+                builtEmbeds.Add(embed.Build());
+            }
 
             // loop all channels
             foreach (var item in channels)
@@ -102,9 +126,16 @@ namespace DiscordBot.Services
                     continue;
                 }
 
-                // actually message the channel
-                await channel.SendMessageAsync($"A new commit!");
+                // wtf
+                builtEmbeds.Reverse();
+
+                // actually message the channel with the list of embeds
+                foreach(var emb in builtEmbeds)
+                    await channel.SendMessageAsync(embed: emb);
+
             }
+
+            
 
             if (hasChanges)
             {
