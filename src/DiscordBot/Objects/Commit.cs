@@ -14,6 +14,10 @@ namespace DiscordBot.Objects
 
         public string Changeset { get; set; }
 
+        public DateTime Created { get; set; }
+
+        public string Message { get; set; }
+
         public User User { get; set; }
     }
 }
