@@ -63,10 +63,12 @@ namespace DiscordBot
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddDbContext<BotContext>()
-                .AddScoped(sp => new HttpClient {BaseAddress =  new Uri("https://commits.facepunch.com") })
+                .AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://commits.facepunch.com") })
                 // Logging
                 .AddLogging()
                 .AddSingleton<LogService>()
+                .AddHostedService<FetchCommitsHostedService>()
+                .AddSingleton<IBroadcastService, BroadcastService>()
                 // Extra
                 .AddSingleton(_config)
 

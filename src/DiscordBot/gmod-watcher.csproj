@@ -17,11 +17,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <!-- Remove this line if using another configuration host: -->
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <!-- Remove this line if using another logging sink: -->
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
 
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.0" />
+
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
 
   </ItemGroup>
 

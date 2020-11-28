@@ -20,6 +20,7 @@ namespace DiscordBot.Services
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting {jobName}", nameof(FetchCommitsHostedService));
+            Console.WriteLine($"Starting {nameof(FetchCommitsHostedService)}");
 
             return Task.CompletedTask;
         }
