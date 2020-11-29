@@ -26,6 +26,6 @@ Coming soon: Facepunch Commit tracker - this bot will be refactored into a gener
 ## Info
 If you delete the channel you assigned and a commit comes through; your guild will be deleted from the list and you will be notified to re-add a channel. This is also true if the Bot doesn't have permission to write to the channel.
 
-Feel free to clone the bot yourself and self-host. 
+Feel free to clone the bot yourself and self-host. Notice: Create ``config.json`` with your bot-token as the key, value. ``token: value``
 
 (Builds coming soon)
