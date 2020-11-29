@@ -7,6 +7,11 @@
 
 
 ## Commands
+~setchannel
+~deletechannel
+~getcommits
+~userinfo
+~help
 
 
 ## Info
