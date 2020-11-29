@@ -28,7 +28,6 @@ namespace DiscordBot.Services
 
     public class BroadcastService: IBroadcastService
     {
-        private readonly ILogger<BroadcastService> _logger;
         private readonly DiscordSocketClient _client;
         private readonly HttpClient _httpClient;
         private readonly BotContext _context;
@@ -39,13 +38,11 @@ namespace DiscordBot.Services
         /// <summary>
         /// Creeates BroadCastServer
         /// </summary>
-        /// <param name="logger"></param>
         /// <param name="client"></param>
         /// <param name="httpClient"></param>
         /// <param name="context"></param>
-        public BroadcastService(ILogger<BroadcastService> logger, DiscordSocketClient client, HttpClient httpClient, BotContext context)
+        public BroadcastService(DiscordSocketClient client, HttpClient httpClient, BotContext context)
         {
-            _logger = logger;
             _client = client;
             _httpClient = httpClient;
             _context = context;
@@ -119,7 +116,7 @@ namespace DiscordBot.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(LogLevel.Critical, ex.ToString());
+                        
                     }
 
                     continue;

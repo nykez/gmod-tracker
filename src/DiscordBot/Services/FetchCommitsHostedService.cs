@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DiscordBot.Services
 {
-    public class FetchCommitsHostedService: IHostedService
+    public class FetchCommitsHostedService: BackgroundService
     {
         private readonly ILogger _logger;
         private readonly IBroadcastService _broadcastService;
@@ -19,14 +19,15 @@ namespace DiscordBot.Services
             _broadcastService = broadcastService;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Starting {jobName}", nameof(FetchCommitsHostedService));
-            Console.WriteLine($"Starting {nameof(FetchCommitsHostedService)}");
+            Console.WriteLine("doing this!");
+            while (!cancellationToken.IsCancellationRequested)
+            {
 
-            RefreshCommitsLog(cancellationToken);
+                await RefreshCommitsLog(cancellationToken);
+            }
 
-            return Task.CompletedTask;
         }
 
         private async Task RefreshCommitsLog(CancellationToken stoppingToken)
@@ -45,16 +46,9 @@ namespace DiscordBot.Services
                 }
 
                 // delay 5 minutes
-                await Task.Delay(5000);
+                await Task.Delay(1000);
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Stopping {jobName}", nameof(FetchCommitsHostedService));
-
-            return Task.CompletedTask;
-
-        }
     }
 }

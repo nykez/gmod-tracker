@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 
 namespace DiscordBot.Services
 {
@@ -14,11 +15,14 @@ namespace DiscordBot.Services
         private readonly DiscordSocketClient _discord;
         private readonly IServiceProvider _services;
 
-        public CommandHandlingService(IServiceProvider services)
+        public CommandHandlingService(DiscordSocketClient discord,
+            CommandService commands,
+            IConfigurationRoot config,
+            IServiceProvider provider)
         {
-            _commands = services.GetRequiredService<CommandService>();
-            _discord = services.GetRequiredService<DiscordSocketClient>();
-            _services = services;
+            _commands = commands;
+            _discord = discord;
+            _services = provider;
 
             // Hook CommandExecuted to handle post-command-execution logic.
             _commands.CommandExecuted += CommandExecutedAsync;
