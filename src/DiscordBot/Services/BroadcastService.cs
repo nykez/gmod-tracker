@@ -116,7 +116,7 @@ namespace DiscordBot.Services
                     }
                     catch (Exception ex)
                     {
-                        
+                        Console.WriteLine(ex.ToString());
                     }
 
                     continue;

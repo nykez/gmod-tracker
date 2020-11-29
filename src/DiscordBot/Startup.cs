@@ -37,6 +37,7 @@ namespace DiscordBot
             var provider = services.BuildServiceProvider(); // build provider
             provider.GetRequiredService<LoggingService>(); // start logging service
             provider.GetRequiredService<CommandHandlingService>(); // start command handling service
+            provider.GetRequiredService<FetchCommitsHostedService>();
 
             await provider.GetRequiredService<StartupService>().StartAsync();
 
