@@ -12,15 +12,15 @@ Coming soon: Facepunch Commit tracker - this bot will be refactored into a gener
 
 
 ## Commands
-~setchannel
+*permission: adminstrator*
+~setchannel `channelid` - Sets the channel to send the commits to. 
 
-~deletechannel
+*permission: adminstrator*
+~deletechannel `channelid` - Deletes the attachment where the commits are send to. (Does **not** delete the channel) 
 
-~getcommits
+~userinfo `user/userid` - Prints out useful information about the Discord user
 
-~userinfo
-
-~help
+~help - Shows all commands for the bot
 
 
 ## Info
