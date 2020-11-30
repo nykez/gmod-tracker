@@ -3,13 +3,15 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
+using Discord.Addons.Hosting;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace DiscordBot.Services
 {
-    public class CommandHandlingService
+    public class CommandHandlingService: InitializedService
     {
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _discord;
@@ -17,22 +19,24 @@ namespace DiscordBot.Services
 
         public CommandHandlingService(DiscordSocketClient discord,
             CommandService commands,
-            IConfigurationRoot config,
+            IConfiguration config,
             IServiceProvider provider)
         {
             _commands = commands;
             _discord = discord;
             _services = provider;
 
+
+        }
+
+        public override async Task InitializeAsync(CancellationToken cancellationToken)
+        {
             // Hook CommandExecuted to handle post-command-execution logic.
             _commands.CommandExecuted += CommandExecutedAsync;
             // Hook MessageReceived so we can process each message to see
             // if it qualifies as a command.
             _discord.MessageReceived += MessageReceivedAsync;
-        }
 
-        public async Task InitializeAsync()
-        {
             // Register modules that are public and inherit ModuleBase<T>.
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
