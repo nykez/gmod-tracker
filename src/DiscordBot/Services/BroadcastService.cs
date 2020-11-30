@@ -107,9 +107,13 @@ namespace DiscordBot.Services
                     }
 
                     // let's just notify that we tried to send a message but couldn't?
-                    // TODO: remove this?
+                    // Also just remove any channels assoicated with this guild. they've been deleted or we can't see them
+                    // TODO: Remove this?
                     try
                     {
+                        _context.Remove(item);
+                        hasChanges = true;
+
                         await _client.GetGuild(item.GuildId).DefaultChannel
                             .SendMessageAsync(
                                 "I tried to send a commit but I couldn't. Please setup a commits channel!");
@@ -154,6 +158,7 @@ namespace DiscordBot.Services
             {
                 var lastestCommit = result.results.First();
 
+
                 if ( Convert.ToInt32(lastestCommit.Changeset) != LastCommitId )
                 {
                     // we have changes
@@ -161,6 +166,8 @@ namespace DiscordBot.Services
                     int toSelect = Convert.ToInt32(lastestCommit.Changeset) - LastCommitId;
 
                     var commits = result.results.Take(toSelect).ToList();
+
+                    LastCommitId = Convert.ToInt32(lastestCommit.Changeset);
 
                     await BroadcastAllGuilds(commits);
                 }

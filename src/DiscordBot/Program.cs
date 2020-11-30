@@ -65,7 +65,7 @@ namespace DiscordBot
                     services.AddDbContext<BotContext>();
                     services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://commits.facepunch.com") });
                     services.AddSingleton<IBroadcastService, BroadcastService>();
-                    //services.AddHostedService<FetchCommitsHostedService>();
+                    services.AddHostedService<FetchCommitsHostedService>();
                 })
                 .UseConsoleLifetime();
 

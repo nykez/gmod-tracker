@@ -21,7 +21,6 @@ namespace DiscordBot.Services
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("doing this!");
             while (!cancellationToken.IsCancellationRequested)
             {
 
@@ -32,7 +31,6 @@ namespace DiscordBot.Services
 
         private async Task RefreshCommitsLog(CancellationToken stoppingToken)
         {
-            Console.WriteLine("doing this!");
             while (!stoppingToken.IsCancellationRequested)
             {
 
@@ -46,7 +44,7 @@ namespace DiscordBot.Services
                 }
 
                 // delay 5 minutes
-                await Task.Delay(1000);
+                await Task.Delay(5000);
             }
         }
 
