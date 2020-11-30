@@ -6,10 +6,12 @@ This is a discord bot that will send commit messages (from:https://commits.facep
 Coming soon: Facepunch Commit tracker - this bot will be refactored into a generic facepunch commit tracker with more functionality. 
 
 ## Installion / Help
-
+1. Invite the bot
+2. Give it sufficent permissions to read/write in the channel you're going to assign `setchannel` too. (**very important**)
+3. Done
 
 ## How to use
-
+Set a commit channel using `~setchannel`. After that all Garry's Mod commits will be broadcastes to that channel in real time.
 
 ## Commands
 *permission: adminstrator*
