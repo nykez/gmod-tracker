@@ -12,6 +12,7 @@ namespace DiscordBot.Context
     {
 
         public virtual DbSet<RegisteredChannel> Channels { get; set; }
+        public virtual DbSet<LastestCommit> LastCommit { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

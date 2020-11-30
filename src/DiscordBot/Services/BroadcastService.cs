@@ -10,6 +10,7 @@ using Discord.WebSocket;
 using DiscordBot.Context;
 using DiscordBot.Objects;
 using Microsoft.Extensions.Logging;
+using DiscordBot.Models;
 
 namespace DiscordBot.Services
 {
@@ -47,6 +48,7 @@ namespace DiscordBot.Services
             _httpClient = httpClient;
             _context = context;
 
+            GetLastestCommitContext();
         }
 
         /// <summary>
@@ -54,9 +56,27 @@ namespace DiscordBot.Services
         /// </summary>
         /// <param name="commits"></param>
         /// <returns></returns>
+        /// 
+
+        private async void GetLastestCommitContext()
+        {
+            // load last commit
+            var itemId = await _context.LastCommit.FirstOrDefaultAsync();
+
+            if (itemId != null)
+                LastCommitId = itemId.LastCommit;
+         
+            
+
+            // check for newer commits
+            await CheckCommits();
+        }
 
         public async Task BroadcastAllGuilds(List<Commit> commits)
         {
+            if (commits == null)
+                return;
+
             // get all channels in database
             var channels = _context.Channels.ToListAsync().Result;
             bool hasChanges = true;
@@ -165,9 +185,31 @@ namespace DiscordBot.Services
                     // let's broadcast them and do some updating
                     int toSelect = Convert.ToInt32(lastestCommit.Changeset) - LastCommitId;
 
+                    if (toSelect <= 0)
+                        return;
+
                     var commits = result.results.Take(toSelect).ToList();
 
+                    if (commits.Count == 0)
+                        return;
+
                     LastCommitId = Convert.ToInt32(lastestCommit.Changeset);
+
+                    var commit = await _context.LastCommit.FirstOrDefaultAsync();
+
+                    if (commit != null)
+                    {
+                        // TODO: Fix this
+                        _context.Remove(commit);
+                        await _context.LastCommit.AddAsync(new LastestCommit { LastCommit = LastCommitId });
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        // Create a commit
+                        await _context.LastCommit.AddAsync(new LastestCommit { LastCommit = LastCommitId });
+                        await _context.SaveChangesAsync();
+                    }
 
                     await BroadcastAllGuilds(commits);
                 }
