@@ -11,7 +11,7 @@ Coming soon: Facepunch Commit tracker - this bot will be refactored into a gener
 3. Done
 
 ## How to use
-Set a commit channel using `~setchannel`. After that all Garry's Mod commits will be broadcastes to that channel in real time.
+Set a commit channel using `~setchannel`. After that all Garry's Mod commits will be broadcasted to that channel in real time.
 
 ## Commands
 *permission: adminstrator*
