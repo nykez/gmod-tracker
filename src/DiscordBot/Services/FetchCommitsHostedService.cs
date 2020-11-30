@@ -44,7 +44,7 @@ namespace DiscordBot.Services
                 }
 
                 // delay 5 minutes
-                await Task.Delay(5000);
+                await Task.Delay(300000);
             }
         }
 
