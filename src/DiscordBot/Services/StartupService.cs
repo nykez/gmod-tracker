@@ -38,6 +38,7 @@ namespace DiscordBot.Services
 
             // set status
             await _discord.SetGameAsync("Watching for commits...");
+            Console.WriteLine($"Total Guilds: {_discord.Guilds}");
 
         }
 
