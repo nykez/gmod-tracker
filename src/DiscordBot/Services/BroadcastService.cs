@@ -11,6 +11,7 @@ using DiscordBot.Context;
 using DiscordBot.Objects;
 using Microsoft.Extensions.Logging;
 using DiscordBot.Models;
+using System.IO;
 
 namespace DiscordBot.Services
 {
@@ -34,7 +35,7 @@ namespace DiscordBot.Services
         private readonly BotContext _context;
 
 
-        public int LastCommitId { get; set; } =  7650;
+        public int LastCommitId { get; set; } =  7653;
 
         /// <summary>
         /// Creeates BroadCastServer
@@ -51,25 +52,43 @@ namespace DiscordBot.Services
             GetLastestCommitContext();
         }
 
-        /// <summary>
-        /// Broadcast commits to all current guilds
-        /// </summary>
-        /// <param name="commits"></param>
-        /// <returns></returns>
-        /// 
+        
+        // temp
 
         private async void GetLastestCommitContext()
         {
-            // load last commit
-            var itemId = await _context.LastCommit.FirstOrDefaultAsync();
+            try
+            {
+                if (!System.IO.File.Exists(@"lastcommit.txt"))
+                    return;
 
-            if (itemId != null)
-                LastCommitId = itemId.LastCommit;
-         
-            
+                using (StreamReader reader = new StreamReader(@"lastcommit.txt"))
+                {
+                    if (reader.Peek() != -1)
+                    {
+                        LastCommitId = Convert.ToInt32(await reader.ReadLineAsync());
+                    }
+                    else
+                    {
+                        await CheckCommits();
+                    }
 
-            // check for newer commits
-            await CheckCommits();
+                }
+            }
+            catch( FileNotFoundException ex )
+            {
+                // Write error.
+                Console.WriteLine(ex);
+            }
+        }
+
+        // temp
+        private void WriteLastestCommitContext()
+        {
+            using (StreamWriter writer = System.IO.File.CreateText(@"lastcommit.txt"))
+            {
+                writer.WriteLine(LastCommitId);
+            }
         }
 
         public async Task BroadcastAllGuilds(List<Commit> commits)
@@ -185,8 +204,6 @@ namespace DiscordBot.Services
                     // let's broadcast them and do some updating
                     int toSelect = Convert.ToInt32(lastestCommit.Changeset) - LastCommitId;
 
-                    if (toSelect <= 0)
-                        return;
 
                     var commits = result.results.Take(toSelect).ToList();
 
@@ -195,21 +212,7 @@ namespace DiscordBot.Services
 
                     LastCommitId = Convert.ToInt32(lastestCommit.Changeset);
 
-                    var commit = await _context.LastCommit.FirstOrDefaultAsync();
-
-                    if (commit != null)
-                    {
-                        // TODO: Fix this
-                        _context.Remove(commit);
-                        await _context.LastCommit.AddAsync(new LastestCommit { LastCommit = LastCommitId });
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        // Create a commit
-                        await _context.LastCommit.AddAsync(new LastestCommit { LastCommit = LastCommitId });
-                        await _context.SaveChangesAsync();
-                    }
+                    WriteLastestCommitContext();
 
                     await BroadcastAllGuilds(commits);
                 }
