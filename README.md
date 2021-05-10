@@ -5,8 +5,6 @@
 ## What is this?
 This is a discord bot that will send commit messages (from:https://commits.facepunch.com/r/Garrys%20Mod) to a dedicated channel in your discord. This is useful if you want to stay update to date with Garry's Mod developement with very little effort :)
 
-Coming soon: Facepunch Commit tracker - this bot will be refactored into a generic facepunch commit tracker with more functionality. 
-
 ## Installion / Help
 1. [Invite the Bot](https://discord.com/oauth2/authorize?client_id=781711730220597278&scope=bot)
 2. Give it sufficent permissions to read/write in the channel you're going to assign `setchannel` too. (**very important**)
