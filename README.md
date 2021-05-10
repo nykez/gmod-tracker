@@ -34,4 +34,4 @@ If you delete the channel you assigned and a commit comes through; your guild wi
 
 Feel free to clone the bot yourself and self-host. Notice: Create ``config.json`` with your bot-token as the key, value. ``token: value``
 
-(Builds coming soon)
+(This is pretty useless since the release of 'annoucement' discord channels)
